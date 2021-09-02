@@ -32,7 +32,7 @@ class Kurv {
     move()
     {
         this.x = (mouseX);
-        this.y = (mouseY);
+        this.y = (height*8/9);
     }
 
     /* Flytter kurvens position

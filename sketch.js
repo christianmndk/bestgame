@@ -1,3 +1,4 @@
+
 // array til appelsiner
 let appelsiner = [];
 
@@ -19,19 +20,35 @@ let spilIgang = true;   // flag
 let spilWon = false;    // har vi vundet eller tabt
 
 let xmaxspeed;
-
+let scorelist;
 function setup() {  // kører kun en gang, når programmet startes
 	createCanvas(750, 600);
-
 	textAlign(CENTER, CENTER);
 
+	scorelist = document.getElementById("list")
+	scorelist.innerHTML ="<br>";
+
+// Check browser support
+if (typeof(Storage) !== "undefined") {
+	// Store
+	localStorage.setItem("score", ["skidt,  du er rigtig dårlig","null"]);
+	// Retrieve
+	scorelist.innerHTML += localStorage.getItem("score");
+  } else {
+	scorelist.innerHTML = "Sorry, your browser does not support Web Storage...";
+  }
+
+
 	//shootNew();
-	shootNew();
-	
+	//shootNew();
+	//scorelist = document.getElementById("list")
+	//scorelist.innerHTML ="<br> hejsa";
+	//scorelist.innerHTML +="hejsa";
 	for(let i = 0; i<10;i++)
 	{
+
 		shootNew();
-		appelsiner[i].tid += 20*i;
+		appelsiner[i].tid += 40*i;
 	}
 	// parametrene til Kurv-konstruktøren er (x, y, bredde, dybde, speed)
 	turban = new Kurv(670, 100, 70, 50, 10);

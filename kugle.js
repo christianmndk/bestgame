@@ -3,7 +3,7 @@ class Appelsin {
     {
         this.x=0;
         this.y=y;
-        this.xspeed=2;
+        this.xspeed=2*Math.random();
         this.yspeed=-10;
         this.tid = 150;
         this.img = loadImage("pic3.png");
