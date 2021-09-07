@@ -19,8 +19,13 @@ let removed = 0; // holder styr på om der er blevet slettet flere end 1 appelsi
 let spilIgang = true;   // flag
 let spilWon = false;    // har vi vundet eller tabt
 
+let game; // the one game currenlty being played
+
+let newlife = 0; // counting for every ten catch you get some extra life
+
 let xmaxspeed;
-let scorelist;
+let scorelist =[0];
+console.log(typeof(scorelist))
 function setup() {  // kører kun en gang, når programmet startes
 	createCanvas(750, 600);
 	textAlign(CENTER, CENTER);
@@ -31,24 +36,37 @@ function setup() {  // kører kun en gang, når programmet startes
 // Check browser support
 if (typeof(Storage) !== "undefined") {
 	// Store
-	localStorage.setItem("score", ["skidt,  du er rigtig dårlig","null"]);
-	// Retrieve
-	scorelist.innerHTML += localStorage.getItem("score");
+	if("score" in localStorage)
+	{
+		scorelist = JSON.parse(localStorage.getItem("score"));
+		console.log(scorelist);
+		// chekker om scorelisten er en array
+		if(!(Array.isArray(scorelist))&&false)
+		{
+			console.log("cookie er ikke en array, så overskriver den til en blank")
+			scorelist = [0];
+		}
+		console.log(scorelist);
+	}
+	else
+	{
+		scorelist = [];
+	}
+	// Ret6rieve
   } else {
 	scorelist.innerHTML = "Sorry, your browser does not support Web Storage...";
   }
+	  
+  opdatescoreboard();
 
 
-	//shootNew();
-	//shootNew();
-	//scorelist = document.getElementById("list")
-	//scorelist.innerHTML ="<br> hejsa";
-	//scorelist.innerHTML +="hejsa";
+
 	for(let i = 0; i<10;i++)
 	{
+		
 
 		shootNew();
-		appelsiner[i].tid += 40*i;
+		appelsiner[i].tid += 30*i;
 	}
 	// parametrene til Kurv-konstruktøren er (x, y, bredde, dybde, speed)
 	turban = new Kurv(670, 100, 70, 50, 10);
@@ -136,8 +154,14 @@ function checkScore() {
 				removed += 1;
 				i -= 1 // fordi vi nu har fjernet en skal indekset rykkes
 				score += 1;
-
-				console.log("boldt fjernet");
+				// count every 10 catch
+				newlife += 1;
+				if(newlife == 10)
+				{
+					liv += 2;
+					newlife = 0;
+				}
+				//console.log("boldt fjernet");
 			}
 		}
 	}
@@ -152,12 +176,11 @@ function checkScore() {
 };
 
 function checkWinLoss() {
-	if (liv < 1) {
+	if (liv < 1&&spilIgang == true) {
 		spilIgang = false;
-	}
-	else if (score >= 50) {
-		spilWon = true
-		spilIgang = false;
+		console.log("game lost");
+		addgame();
+		
 	}
 }    
 
@@ -172,4 +195,20 @@ function shootNew() {
 function keyPressed() {
 	// Funktionen gør ingenting lige nu
 	return false;  // Forebygger evt. browser default behaviour
+}
+function addgame()
+{
+	scorelist.push(score);
+	scorelist = scorelist.sort();
+	scorelist.reverse();
+	localStorage.setItem("score", JSON.stringify(scorelist));
+	console.log(scorelist);
+
+}
+function opdatescoreboard()
+{
+	for( game in scorelist)
+	{
+	  scorelist.innerHTML += game.toString(10); + "<br>";
+	}
 }
