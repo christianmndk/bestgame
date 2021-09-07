@@ -55,7 +55,7 @@ class Kurv {
         //console.log(NEGET)
 
         if (NEGET<Math.pow(appel.radius,2)) {
-            console.log(NEGET)
+            //console.log(NEGET)
             return true;
         }
         else {

@@ -22,7 +22,7 @@ let spilWon = false;    // har vi vundet eller tabt
 let game; // the one game currenlty being played
 
 let newlife = 0; // counting for every ten catch you get some extra life
-
+let scoreboard;
 let xmaxspeed;
 let scorelist =[0];
 console.log(typeof(scorelist))
@@ -30,8 +30,8 @@ function setup() {  // kører kun en gang, når programmet startes
 	createCanvas(750, 600);
 	textAlign(CENTER, CENTER);
 
-	scorelist = document.getElementById("list")
-	scorelist.innerHTML ="<br>";
+	scoreboard = document.getElementById("list")
+	scoreboard.innerHTML ="<br>";
 
 // Check browser support
 if (typeof(Storage) !== "undefined") {
@@ -39,8 +39,14 @@ if (typeof(Storage) !== "undefined") {
 	if("score" in localStorage)
 	{
 		scorelist = JSON.parse(localStorage.getItem("score"));
+
+		//for (let i = 0; i < scorelist.length; i++) {
+		//	scorelist[i] = parseInt(scorelist[i],10);
+		//	
+		//}
 		console.log(scorelist);
 		// chekker om scorelisten er en array
+
 		if(!(Array.isArray(scorelist))&&false)
 		{
 			console.log("cookie er ikke en array, så overskriver den til en blank")
@@ -137,6 +143,7 @@ function checkMiss() {
 };
 
 function miss() {
+	debugger;
 	missed += 1;
 	liv -= 1;
 	checkWinLoss()
@@ -198,17 +205,19 @@ function keyPressed() {
 }
 function addgame()
 {
+	
 	scorelist.push(score);
-	scorelist = scorelist.sort();
-	scorelist.reverse();
+	scorelist.sort(function(a,b){return b-a});
+	opdatescoreboard();
 	localStorage.setItem("score", JSON.stringify(scorelist));
 	console.log(scorelist);
 
 }
 function opdatescoreboard()
 {
-	for( game in scorelist)
-	{
-	  scorelist.innerHTML += game.toString(10); + "<br>";
+	scoreboard.innerHTML = "<br>";
+	for (let i = 0; i < scorelist.length; i++) {
+		scoreboard.innerHTML += scorelist[i] + "<br>";
+		
 	}
 }
